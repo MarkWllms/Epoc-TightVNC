@@ -1,0 +1,1 @@
+C:\epoc32\bin\javac -O -d .\java  -target 1.1 src\*.java

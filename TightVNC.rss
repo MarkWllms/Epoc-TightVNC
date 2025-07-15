@@ -1,0 +1,13 @@
+#include <aiftool.rh>
+
+RESOURCE AIF_DATA
+{
+	app_uid = 0x0BADBEEF;
+	caption_list =
+		{
+		CAPTION {code = ELangEnglish; caption = "TightVNC"; }
+		};
+	num_icons = 4;
+	embeddability= KAppNotEmbeddable;
+}
+	

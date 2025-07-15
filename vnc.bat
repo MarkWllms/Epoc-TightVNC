@@ -1,0 +1,1 @@
+ \epoc32\release\wins\rel\java.exe  -MVGA -- -cp c:/system/apps/Tightvnc/java VncViewer  "Compression level" 9 Encoding "Tight" 
