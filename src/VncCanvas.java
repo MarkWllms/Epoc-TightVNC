@@ -214,7 +214,7 @@ class VncCanvas extends Canvas
       addMouseListener(this);
       addMouseMotionListener(this);
       if (viewer.showControls) {
-	viewer.buttonPanel.enableRemoteAccessControls(true);
+//	viewer.buttonPanel.enableRemoteAccessControls(true);
       }
       createSoftCursor();	// scaled cursor
     } else if (!enable && inputEnabled) {
@@ -222,7 +222,7 @@ class VncCanvas extends Canvas
       removeMouseListener(this);
       removeMouseMotionListener(this);
       if (viewer.showControls) {
-	viewer.buttonPanel.enableRemoteAccessControls(false);
+//	viewer.buttonPanel.enableRemoteAccessControls(false);
       }
       createSoftCursor();	// non-scaled cursor
     }
@@ -313,7 +313,7 @@ class VncCanvas extends Canvas
 
   void resizeDesktopFrame() {
     setSize(scaledWidth, scaledHeight);
-
+	
     // FIXME: Find a better way to determine correct size of a
     // ScrollPane.  -- const
     Insets insets = viewer.desktopScrollPane.getInsets();
@@ -323,9 +323,8 @@ class VncCanvas extends Canvas
 				     2 * Math.min(insets.top, insets.bottom));
 
     viewer.vncFrame.pack();
-
     // Try to limit the frame size to the screen size.
-
+	
     Dimension screenSize = viewer.vncFrame.getToolkit().getScreenSize();
     Dimension frameSize = viewer.vncFrame.getSize();
     Dimension newSize = frameSize;
@@ -337,8 +336,8 @@ class VncCanvas extends Canvas
     //     2) Taxkbar on Windows (usually about 28 px on bottom)
     //     3) Other obstructions.
 
-    screenSize.height -= 30;
-    screenSize.width  -= 30;
+    screenSize.height += 30;
+    screenSize.width  += 10;
 
     boolean needToResizeFrame = false;
     if (frameSize.height > screenSize.height) {
@@ -352,8 +351,9 @@ class VncCanvas extends Canvas
     if (needToResizeFrame) {
       viewer.vncFrame.setSize(newSize);
     }
-
+	
     viewer.desktopScrollPane.doLayout();
+
   }
 
   //

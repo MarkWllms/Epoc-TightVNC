@@ -113,6 +113,8 @@ class OptionsFrame extends Frame
 
     GridBagConstraints gbc = new GridBagConstraints();
     gbc.fill = GridBagConstraints.BOTH;
+	gbc.insets = new Insets(2,2,2,2);
+	gbc.anchor = GridBagConstraints.NORTH;
 
     for (int i = 0; i < names.length; i++) {
       labels[i] = new Label(names[i]);

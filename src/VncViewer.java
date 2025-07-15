@@ -59,8 +59,9 @@ public class VncViewer extends java.applet.Applet
   Frame vncFrame;
   Container vncContainer;
   ScrollPane desktopScrollPane;
-  GridBagLayout gridbag;
-  ButtonPanel buttonPanel;
+  BorderLayout gridbag;
+//  ButtonPanel buttonPanel;
+  MenuBar menubar;
   Label connStatusLabel;
   VncCanvas vc;
   OptionsFrame options;
@@ -105,7 +106,9 @@ public class VncViewer extends java.applet.Applet
     if (inSeparateFrame) {
       vncFrame = new Frame("TightVNC");
       if (!inAnApplet) {
-	vncFrame.add("Center", this);
+		vncFrame.add("Center", this);
+		menubar = new VncMenuBar(this);
+		vncFrame.setMenuBar(menubar);
       }
       vncContainer = vncFrame;
     } else {
@@ -125,8 +128,10 @@ public class VncViewer extends java.applet.Applet
     cursorUpdatesDef = null;
     eightBitColorsDef = null;
 
-    if (inSeparateFrame)
+    if (inSeparateFrame){
       vncFrame.addWindowListener(this);
+	  
+	}
 
     rfbThread = new Thread(this);
     rfbThread.start();
@@ -141,9 +146,9 @@ public class VncViewer extends java.applet.Applet
 
   public void run() {
 
-    gridbag = new GridBagLayout();
+    gridbag = new BorderLayout();
     vncContainer.setLayout(gridbag);
-
+/*
     GridBagConstraints gbc = new GridBagConstraints();
     gbc.gridwidth = GridBagConstraints.REMAINDER;
     gbc.anchor = GridBagConstraints.NORTHWEST;
@@ -153,7 +158,7 @@ public class VncViewer extends java.applet.Applet
       gridbag.setConstraints(buttonPanel, gbc);
       vncContainer.add(buttonPanel);
     }
-
+*/
     try {
       connectAndAuthenticate();
       doProtocolInitialisation();
@@ -166,14 +171,15 @@ public class VncViewer extends java.applet.Applet
 	} catch (Exception e) {
 	  screenSize = new Dimension(0, 0);
 	}
-	createCanvas(screenSize.width - 32, screenSize.height - 32);
-      } else {
+	//createCanvas(screenSize.width - 32, screenSize.height - 32);
+	createCanvas(screenSize.width, screenSize.height);
+	      } else {
 	createCanvas(0, 0);
       }
-
+/*
       gbc.weightx = 1.0;
       gbc.weighty = 1.0;
-
+*/
       if (inSeparateFrame) {
 
 	// Create a panel which itself is resizeable and can hold
@@ -185,28 +191,29 @@ public class VncViewer extends java.applet.Applet
 	// Create a ScrollPane which will hold a panel with VncCanvas
 	// inside.
 	desktopScrollPane = new ScrollPane(ScrollPane.SCROLLBARS_AS_NEEDED);
-	gbc.fill = GridBagConstraints.BOTH;
-	gridbag.setConstraints(desktopScrollPane, gbc);
+/*	gbc.fill = GridBagConstraints.BOTH;
+	gridbag.setConstraints(desktopScrollPane, gbc);*/
 	desktopScrollPane.add(canvasPanel);
 
 	// Finally, add our ScrollPane to the Frame window.
 	vncFrame.add(desktopScrollPane);
 	vncFrame.setTitle(rfb.desktopName);
 	vncFrame.pack();
+	vncFrame.setLocation(-5,-25);
 	vc.resizeDesktopFrame();
 
       } else {
 
 	// Just add the VncCanvas component to the Applet.
-	gridbag.setConstraints(vc, gbc);
+	//gridbag.setConstraints(vc, gbc);
 	add(vc);
 	validate();
 
       }
-
+/*
       if (showControls)
 	buttonPanel.enableButtons();
-
+*/
       moveFocusToDesktop();
       processNormalProtocol();
 
@@ -229,14 +236,14 @@ public class VncViewer extends java.applet.Applet
 	}
 	if (rfb != null && !rfb.closed())
 	  rfb.close();
-	if (showControls && buttonPanel != null) {
+/*	if (showControls && buttonPanel != null) {
 	  buttonPanel.disableButtonsOnDisconnect();
 	  if (inSeparateFrame) {
 	    vncFrame.pack();
 	  } else {
 	    validate();
 	  }
-	}
+	}*/
       } else {
 	fatalError("Network error: remote side closed connection", e);
       }
@@ -312,6 +319,7 @@ public class VncViewer extends java.applet.Applet
 
   void connectAndAuthenticate() throws Exception
   {
+		
     showConnectionStatus("Initializing...");
     if (inSeparateFrame) {
       vncFrame.pack();
@@ -319,7 +327,14 @@ public class VncViewer extends java.applet.Applet
     } else {
       validate();
     }
-
+	
+	if (host == null) {
+		try {
+			host = askHost();
+		} catch (Exception e) {
+	  	    fatalError("HOST parameter not specified");
+		}
+	}
     showConnectionStatus("Connecting to " + host + ", port " + port + "...");
 
     rfb = new RfbProto(host, port, this);
@@ -387,14 +402,14 @@ public class VncViewer extends java.applet.Applet
     }
 
     if (!vncContainer.isAncestorOf(connStatusLabel)) {
-      GridBagConstraints gbc = new GridBagConstraints();
+/*      GridBagConstraints gbc = new GridBagConstraints();
       gbc.gridwidth = GridBagConstraints.REMAINDER;
       gbc.fill = GridBagConstraints.HORIZONTAL;
       gbc.anchor = GridBagConstraints.NORTHWEST;
       gbc.weightx = 1.0;
       gbc.weighty = 1.0;
       gbc.insets = new Insets(20, 30, 20, 30);
-      gridbag.setConstraints(connStatusLabel, gbc);
+      gridbag.setConstraints(connStatusLabel, gbc);*/
       vncContainer.add(connStatusLabel);
     }
 
@@ -415,7 +430,7 @@ public class VncViewer extends java.applet.Applet
     showConnectionStatus(null);
 
     AuthPanel authPanel = new AuthPanel(this);
-
+/*
     GridBagConstraints gbc = new GridBagConstraints();
     gbc.gridwidth = GridBagConstraints.REMAINDER;
     gbc.anchor = GridBagConstraints.NORTHWEST;
@@ -423,7 +438,7 @@ public class VncViewer extends java.applet.Applet
     gbc.weighty = 1.0;
     gbc.ipadx = 100;
     gbc.ipady = 50;
-    gridbag.setConstraints(authPanel, gbc);
+    gridbag.setConstraints(authPanel, gbc);*/
     vncContainer.add(authPanel);
 
     if (inSeparateFrame) {
@@ -437,6 +452,28 @@ public class VncViewer extends java.applet.Applet
     vncContainer.remove(authPanel);
 
     return pw;
+  }
+  
+  //
+  // Show an authentication panel.
+  //
+
+  String askHost() throws Exception
+  {
+    //showConnectionStatus(null);
+	
+	HostPanel hostPanel = new HostPanel(this);
+	vncContainer.add(hostPanel);
+
+    if (inSeparateFrame) {
+      vncFrame.pack();
+    } else {
+      validate();
+    }
+    hostPanel.port=port;
+    String newhost = hostPanel.getHost();
+	port=hostPanel.port;
+    return newhost;
   }
 
 
@@ -685,15 +722,14 @@ public class VncViewer extends java.applet.Applet
   //
 
   void readParameters() {
-    host = readParameter("HOST", !inAnApplet);
+    port = readIntParameter("PORT", 5900);
+	
+	host = readParameter("HOST", false);
     if (host == null) {
-      host = getCodeBase().getHost();
-      if (host.equals("")) {
-	fatalError("HOST parameter not specified");
+      if (inAnApplet) {
+		  host = getCodeBase().getHost();
       }
     }
-
-    port = readIntParameter("PORT", 5900);
 
     // Read "ENCPASSWORD" or "PASSWORD" parameter if specified.
     readPasswordParameters();
@@ -706,7 +742,7 @@ public class VncViewer extends java.applet.Applet
     }
 
     // "Show Controls" set to "No" disables button panel.
-    showControls = true;
+    showControls = false;
     str = readParameter("Show Controls", false);
     if (str != null && str.equalsIgnoreCase("No"))
       showControls = false;
