@@ -23,11 +23,12 @@ available.
 
 Notes for Epoc32
 ================
-To compile the .java files to .class files, do
+To compile the .java files to .class files, do the following:
 
-    \epoc32\bin\javac -O -d .\java  -target 1.1 src\*.java
-    \epoc32\bin\jar cf TightVNC.jar java\*.class
+    javac -O -d .\java  -target 1.1 src\*.java
+    jar cf TightVNC.jar java\*.class
 
+Any version up to JDK v8 can target JRE 1.1: you dont need the javac from Psion's SDK.
 
 Compiling from the sources
 ==========================
