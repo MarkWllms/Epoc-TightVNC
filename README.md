@@ -1,4 +1,3 @@
-
   TightVNC Java Viewer version 1.3.10
 
 ======================================================================
@@ -25,7 +24,9 @@ available.
 Notes for Epoc32
 ================
 To compile the .java files to .class files, do
-\epoc32\bin\javac -O -d .\java  -target 1.1 src\*.java
+
+    \epoc32\bin\javac -O -d .\java  -target 1.1 src\*.java
+    \epoc32\bin\jar cf TightVNC.jar java\*.class
 
 
 Compiling from the sources
